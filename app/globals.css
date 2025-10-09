@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-terminal-bg text-terminal-text font-mono;
+    overflow: hidden;
+  }
+}
+
+/* CRT Screen Effect */
+.crt-screen {
+  position: relative;
+  animation: crt-flicker 0.15s infinite;
+}
+
+.crt-screen::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  ),
+  linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.06),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.06)
+  );
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Scanline Effect */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 255, 65, 0.3),
+    transparent
+  );
+  animation: scan-line 8s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Glow Effect */
+.text-glow {
+  text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
+  animation: text-glow 1.5s ease-in-out infinite alternate;
+}
+
+/* Cursor */
+.terminal-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 20px;
+  background-color: #00ff41;
+  animation: cursor-blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+/* Glass morphism for neo mode */
+.glass {
+  background: rgba(10, 14, 20, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 255, 65, 0.1);
+}
+
+/* Typing animation */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.typing-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #00ff41;
+  animation: typing 2s steps(40, end), cursor-blink 0.75s step-end infinite;
+}
+
+/* Neon background gradient */
+.neon-gradient {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 255, 65, 0.1) 0%,
+    rgba(10, 14, 20, 1) 70%
+  );
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0e14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00ff41;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc33;
+}
