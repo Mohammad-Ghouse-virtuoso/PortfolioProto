@@ -253,8 +253,62 @@ ${ASCII_ART.logo}
         const project = PROJECTS.find((p) => p.name.toLowerCase() === projectName);
 
         if (project) {
-          return {
-            output: `
+          // Check if project has extended details (like EventiFy)
+          if ('problem' in project && 'solution' in project) {
+            const wrapText = (text: string, maxWidth: number = 57) => {
+              const words = text.split(' ');
+              const lines: string[] = [];
+              let currentLine = '';
+              
+              words.forEach((word) => {
+                if ((currentLine + word).length <= maxWidth) {
+                  currentLine += (currentLine ? ' ' : '') + word;
+                } else {
+                  if (currentLine) lines.push(currentLine);
+                  currentLine = word;
+                }
+              });
+              if (currentLine) lines.push(currentLine);
+              return lines;
+            };
+
+            const problemLines = wrapText(project.problem);
+            const solutionLines = wrapText(project.solution);
+            const impactLines = wrapText(project.impact || '');
+
+            return {
+              output: `
+╔════════════════════════════════════════════════════════════╗
+║  📦 ${project.name.toUpperCase().padEnd(55)} ║
+╠════════════════════════════════════════════════════════════╣
+║                                                             ║
+║  PROBLEM                                                   ║
+║  ${problemLines.map(line => line.padEnd(57)).join('\n║  ')} ║
+║                                                             ║
+║  SOLUTION                                                  ║
+║  ${solutionLines.map(line => line.padEnd(57)).join('\n║  ')} ║
+║                                                             ║
+║  KEY FEATURES                                              ║
+${project.keyFeatures?.map(feature => `║  • ${feature.padEnd(55)}`).join('\n') || ''}
+║                                                             ║
+║  IMPACT                                                    ║
+║  ${impactLines.map(line => line.padEnd(57)).join('\n║  ')} ║
+║                                                             ║
+║  STACK                                                     ║
+${project.stack ? `║  Frontend: ${project.stack.frontend.substring(0, 47).padEnd(47)}
+║  Backend:  ${project.stack.backend.substring(0, 47).padEnd(47)}
+║  Tooling:  ${project.stack.tooling.substring(0, 47).padEnd(47)}` : `║  ${project.tech.padEnd(57)}`}
+║                                                             ║
+║  Repository: ${project.link.padEnd(45)} ║
+║                                                             ║
+╚════════════════════════════════════════════════════════════╝
+              `,
+              type: 'output',
+            };
+          } else {
+            // Standard project display for projects without extended details
+            return {
+              output: `
 ╔════════════════════════════════════════════════════════════╗
 ║  📦 ${project.name.toUpperCase().padEnd(55)} ║
 ╠════════════════════════════════════════════════════════════╣
@@ -271,9 +325,10 @@ ${ASCII_ART.logo}
 ║  [Opening in new window...]                                ║
 ║                                                             ║
 ╚════════════════════════════════════════════════════════════╝
-            `,
-            type: 'output',
-          };
+              `,
+              type: 'output',
+            };
+          }
         } else {
           return {
             output: `Error: Project '${projectName}' not found.\nType 'projects list' to see available projects.`,
