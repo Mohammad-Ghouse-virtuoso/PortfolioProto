@@ -4,6 +4,7 @@ export interface TerminalLine {
   id: string;
   type: 'input' | 'output' | 'error' | 'system';
   content: string;
+  component?: React.ReactNode;
   timestamp: Date;
 }
 
@@ -14,7 +15,7 @@ interface TerminalStore {
   isLoggedIn: boolean;
   username: string;
   neoMode: boolean;
-  
+
   addLine: (line: Omit<TerminalLine, 'id' | 'timestamp'>) => void;
   setCurrentInput: (input: string) => void;
   setBooting: (isBooting: boolean) => void;
@@ -31,7 +32,7 @@ export const useTerminalStore = create<TerminalStore>((set) => ({
   isLoggedIn: false,
   username: 'guest',
   neoMode: false,
-  
+
   addLine: (line) =>
     set((state) => ({
       lines: [
@@ -43,16 +44,16 @@ export const useTerminalStore = create<TerminalStore>((set) => ({
         },
       ],
     })),
-  
+
   setCurrentInput: (input) => set({ currentInput: input }),
-  
+
   setBooting: (isBooting) => set({ isBooting }),
-  
+
   setLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
-  
+
   setUsername: (username) => set({ username }),
-  
+
   toggleNeoMode: () => set((state) => ({ neoMode: !state.neoMode })),
-  
+
   clearTerminal: () => set({ lines: [] }),
 }));

@@ -17,19 +17,18 @@ export default function TerminalOutput({ lines }: TerminalOutputProps) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className={`mb-2 ${
-            line.type === 'input'
+          className={`mb-2 ${line.type === 'input'
               ? 'text-terminal-glow'
               : line.type === 'error'
-              ? 'text-terminal-error'
-              : line.type === 'system'
-              ? 'text-terminal-warning'
-              : 'text-terminal-text'
-          }`}
+                ? 'text-terminal-error'
+                : line.type === 'system'
+                  ? 'text-terminal-warning'
+                  : 'text-terminal-text'
+            }`}
         >
-          <pre className="font-mono text-xs md:text-sm whitespace-pre-wrap break-words">
-            {line.content}
-          </pre>
+          <div className="font-mono text-xs md:text-sm whitespace-pre-wrap break-words">
+            {line.component || line.content}
+          </div>
         </motion.div>
       ))}
     </AnimatePresence>
